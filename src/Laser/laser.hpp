@@ -1,19 +1,16 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include <Laser/laser.hpp>
-#include <vector>
+#include <SFML/Graphics/Sprite.hpp>
 
-
-class Spaceship {
+class Laser {
  public:
-  Spaceship();
-  ~Spaceship();
-  void Draw(sf::RenderWindow& window);
-  void Fire();
-  void MoveLeft();
-  void MoveRight();
+  Laser(sf::Vector2f position, int velocity, sf::Color color);
 
-  std::vector<Laser> lasers;
+  void Draw(sf::RenderWindow& window);
+  void Update();
+  bool active;
+  int velocity;
+
  private:
   sf::Sprite sprite;
   std::vector<sf::Texture> animation;

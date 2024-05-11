@@ -15,6 +15,7 @@ int main() {
       if (event.type == sf::Event::Closed) window.close();
     }
     game.InputHandle();
+    game.Update();
 
     window.clear();
 
