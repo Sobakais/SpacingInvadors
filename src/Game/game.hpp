@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Spaceship/spaceship.hpp>
+#include <Barrier/barrier.hpp>
 
 class Game {
  public:
@@ -10,7 +11,9 @@ class Game {
   void Update();
   void InputHandle();
   void DeleteInactiveShipLasers();
+  std::vector<Barrier> CreateBarriers();
 
  private:
   Spaceship spaceship;
+  std::vector<Barrier> barriers;
 };

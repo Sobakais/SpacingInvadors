@@ -4,4 +4,3 @@ target_include_directories(game PUBLIC
   $<INSTALL_INTERFACE:include>
 )
 install(TARGETS game)
-link_libraries(game PUBLIC spaceship)

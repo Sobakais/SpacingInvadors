@@ -20,15 +20,15 @@ Spaceship::~Spaceship() {
   // As far as I can tell, Sprite destructor will clean up its texture
 }
 
-void Spaceship::Draw(sf::RenderWindow& window) {
-  window.draw(sprite);
-}
+void Spaceship::Draw(sf::RenderWindow& window) { window.draw(sprite); }
 
 void Spaceship::Fire() {
+  // 14 and 20 is resolution of laser sprite
   if (delay_to_shoot <= 0.f) {
     lasers.push_back(
-      Laser({position.x + (sprite.getLocalBounds().width / 2) - 15, position.y - sprite.getLocalBounds().height}, 5,
-            sf::Color({153, 0, 189, 255})));
+        Laser({position.x + (sprite.getLocalBounds().width / 2) - 7,
+               position.y - 19},
+              5, sf::Color({153, 0, 189, 255})));
     delay_to_shoot = 2.5f;
   }
 }
