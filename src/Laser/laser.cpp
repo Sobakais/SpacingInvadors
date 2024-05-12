@@ -1,5 +1,6 @@
 #include "laser.hpp"
 #include <SFML/Graphics/Color.hpp>
+#include <iostream>
 #include <config.hpp>
 
 Laser::Laser(sf::Vector2f position, int velocity, sf::Color color) {
@@ -17,12 +18,17 @@ Laser::Laser(sf::Vector2f position, int velocity, sf::Color color) {
   time = 0.f;
 }
 
+Laser::~Laser() {
+}
+
 void Laser::Draw(sf::RenderWindow& window) {
   window.draw(sprite);
 }
 
 void Laser::Update() {
-  active = (position.y > 0 || position.y + sprite.getLocalBounds().height < WINDOW_HEIGHT) ? true : false;
+  if (position.y + sprite.getLocalBounds().height < 0.f || position.y > WINDOW_HEIGHT) {
+    active = false;
+  }
   time = time > 12.7f ? 0.f : time + 0.2f;
   frame = (int)time;
   position.y -= velocity;

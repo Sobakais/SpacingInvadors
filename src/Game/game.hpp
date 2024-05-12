@@ -9,6 +9,8 @@ class Game {
   void Draw(sf::RenderWindow& window);
   void Update();
   void InputHandle();
+  void DeleteInactiveShipLasers();
+
  private:
   Spaceship spaceship;
 };

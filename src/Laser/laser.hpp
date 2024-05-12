@@ -5,6 +5,7 @@
 class Laser {
  public:
   Laser(sf::Vector2f position, int velocity, sf::Color color);
+  ~Laser();
 
   void Draw(sf::RenderWindow& window);
   void Update();
