@@ -3,7 +3,7 @@
 #include "game.hpp"
 
 Game::Game() {
-  barriers = CreateBarriers(); 
+  barriers = CreateBarriers();
   invadors = CreateInvadors();
 }
 
@@ -68,14 +68,20 @@ std::vector<Barrier> Game::CreateBarriers() {
 
 std::vector<Invador> Game::CreateInvadors() {
   int gap = 15;
-  //Enemies field is 11 x 5
-  //Invador sptite is 35 x 30
+  // Enemies field is 11 x 5
+  // Invador sptite is 35 x 30
   float beginX = (WINDOW_WIDTH - ((35 * 11) + (gap * 10))) / 2;
   float beginY = 50;
   for (int row = 0; row < 5; row++) {
-    int Type = row % 3;
+    int Type = 0;
+    if (row == 0) {
+      Type = 2;
+    }
+    if (row == 1 || row == 2) {
+      Type = 1;
+    }
     for (int col = 0; col < 11; col++) {
-      int x = beginX + (col * (gap + 35)); 
+      int x = beginX + (col * (gap + 35));
       int y = beginY + (row * (gap + 30));
       invadors.push_back(Invador(sf::Vector2f(x, y), Type));
     }
