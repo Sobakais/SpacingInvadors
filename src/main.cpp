@@ -3,6 +3,7 @@
 #include <config.hpp>
 
 
+
 int main() {
   sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Game");
   window.setFramerateLimit(FPS);

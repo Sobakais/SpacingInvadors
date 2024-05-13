@@ -14,7 +14,7 @@ class Laser {
 
  private:
   sf::Sprite sprite;
-  std::vector<sf::Texture> animation;
+  static std::vector<sf::Texture> animation;
   sf::Vector2f position;
   size_t frame = 0;
   float time = 0.f;
