@@ -1,8 +1,6 @@
-#include <SFML/Graphics.hpp>
 #include <Game/game.hpp>
+#include <SFML/Graphics.hpp>
 #include <config.hpp>
-
-
 
 int main() {
   sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Game");

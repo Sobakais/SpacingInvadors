@@ -1,7 +1,6 @@
 #pragma once
-#include <SFML/Graphics.hpp>
 #include <Laser/laser.hpp>
-
+#include <SFML/Graphics.hpp>
 
 class Spaceship {
  public:
@@ -15,7 +14,7 @@ class Spaceship {
   void MoveRight();
 
   std::vector<Laser> lasers;
-  
+
  private:
   sf::Sprite sprite;
   std::vector<sf::Texture> animation;

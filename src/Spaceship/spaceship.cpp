@@ -25,16 +25,15 @@ void Spaceship::Draw(sf::RenderWindow& window) { window.draw(sprite); }
 void Spaceship::Fire() {
   // 14 and 20 is resolution of laser sprite
   if (delay_to_shoot <= 0.f) {
-    lasers.push_back(
-        Laser({position.x + (sprite.getLocalBounds().width / 2) - 7,
-               position.y - 19},
-              5, sf::Color({153, 0, 189, 255})));
+    lasers.push_back(Laser(
+        {position.x + (sprite.getLocalBounds().width / 2) - 7, position.y - 19},
+        5, sf::Color({153, 0, 189, 255})));
     delay_to_shoot = 2.5f;
   }
 }
 
 void Spaceship::Update() {
-  time = time > 20.2f ? 0.f : time + 0.1f;
+  time = time > 20.2f ? 0.f : time + 0.2f;
   frame = (int)time;
   sprite.setTexture(animation[frame]);
   sprite.setPosition(position);

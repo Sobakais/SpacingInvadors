@@ -1,8 +1,8 @@
 #pragma once
 
-#include <Spaceship/spaceship.hpp>
 #include <Barrier/barrier.hpp>
 #include <Invador/invador.hpp>
+#include <Spaceship/spaceship.hpp>
 
 class Game {
  public:
@@ -11,12 +11,22 @@ class Game {
   void Draw(sf::RenderWindow& window);
   void Update();
   void InputHandle();
-  void DeleteInactiveShipLasers();
+
   std::vector<Barrier> CreateBarriers();
   std::vector<Invador> CreateInvadors();
 
  private:
   Spaceship spaceship;
+
+  std::vector<Laser> invadorsLasers;
   std::vector<Invador> invadors;
+  float invadorsShootDelay = 3.5f;
+  int invadorsDirection;
+
   std::vector<Barrier> barriers;
+
+  void MoveInvadors();
+  void MoveInvadorsDown(int dist);
+  void DeleteInactiveLasers();
+  void InvadorShootLaser();
 };

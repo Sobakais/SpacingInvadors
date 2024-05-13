@@ -5,12 +5,17 @@
 Game::Game() {
   barriers = CreateBarriers();
   invadors = CreateInvadors();
+  invadorsDirection = 1;
+  invadorsLasers = std::vector<Laser>();
 }
 
 Game::~Game() {}
 
 void Game::Draw(sf::RenderWindow& window) {
   for (auto& laser : spaceship.lasers) {
+    laser.Draw(window);
+  }
+  for (auto& laser : invadorsLasers) {
     laser.Draw(window);
   }
   for (auto& barrier : barriers) {
@@ -24,8 +29,21 @@ void Game::Draw(sf::RenderWindow& window) {
 
 void Game::Update() {
   spaceship.Update();
-  DeleteInactiveShipLasers();
+
+  DeleteInactiveLasers();
+
+  if (invadorsShootDelay <= 0) {
+    InvadorShootLaser();
+  } else {
+    invadorsShootDelay -= 0.1f;
+  }
+
+  MoveInvadors();
+
   for (auto& laser : spaceship.lasers) {
+    laser.Update();
+  }
+  for (auto& laser : invadorsLasers) {
     laser.Update();
   }
   for (auto& invador : invadors) {
@@ -46,10 +64,17 @@ void Game::InputHandle() {
   }
 }
 
-void Game::DeleteInactiveShipLasers() {
+void Game::DeleteInactiveLasers() {
   for (auto it = spaceship.lasers.begin(); it != spaceship.lasers.end();) {
     if (!it->active) {
       spaceship.lasers.erase(it);
+    } else {
+      ++it;
+    }
+  }
+  for (auto it = invadorsLasers.begin(); it != invadorsLasers.end();) {
+    if (!it->active) {
+      invadorsLasers.erase(it);
     } else {
       ++it;
     }
@@ -87,4 +112,32 @@ std::vector<Invador> Game::CreateInvadors() {
     }
   }
   return invadors;
+}
+
+void Game::MoveInvadors() {
+  for (auto& invador : invadors) {
+    if (invador.position.x + 35 >= WINDOW_WIDTH) {
+      invadorsDirection = -1;
+      MoveInvadorsDown(5);
+    } else if (invador.position.x <= 0) {
+      invadorsDirection = 1;
+      MoveInvadorsDown(5);
+    }
+    invador.position.x += invadorsDirection;
+    invador.Update();
+  }
+}
+
+void Game::MoveInvadorsDown(int dist) {
+  for (auto& invador : invadors) {
+    invador.position.y += dist;
+  }
+}
+
+void Game::InvadorShootLaser() {
+  int random = rand() % (invadors.size() - 0 + 1);
+  invadorsLasers.push_back(Laser({invadors[random].position.x + ((35 - 14) / 2),
+                                  invadors[random].position.y + 20},
+                                 -5, invadors[random].sprite.getColor()));
+  invadorsShootDelay = 3.5f;
 }

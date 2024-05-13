@@ -9,7 +9,7 @@ class Invador {
 
   void Draw(sf::RenderWindow& window);
   void Update();
-  
+
   int type;
   sf::Vector2f position;
   sf::Sprite sprite;
