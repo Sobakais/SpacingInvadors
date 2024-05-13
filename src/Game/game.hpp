@@ -2,6 +2,7 @@
 
 #include <Barrier/barrier.hpp>
 #include <Invador/invador.hpp>
+#include <RandomInvador/randominvador.hpp>
 #include <Spaceship/spaceship.hpp>
 
 class Game {
@@ -22,6 +23,9 @@ class Game {
   std::vector<Invador> invadors;
   float invadorsShootDelay = 3.5f;
   int invadorsDirection;
+
+  RandomInvador randomInvador;
+  float randomInvadorsDelay = 1.0f;
 
   std::vector<Barrier> barriers;
 

@@ -1,12 +1,16 @@
 #include <config.hpp>
+#include <cstdlib>
 
 #include "game.hpp"
 
 Game::Game() {
   barriers = CreateBarriers();
+
   invadors = CreateInvadors();
   invadorsDirection = 1;
   invadorsLasers = std::vector<Laser>();
+
+  randomInvador = RandomInvador();
 }
 
 Game::~Game() {}
@@ -25,6 +29,10 @@ void Game::Draw(sf::RenderWindow& window) {
     invador.Draw(window);
   }
   spaceship.Draw(window);
+
+  if (randomInvador.isAlive) {
+    randomInvador.Draw(window);
+  }
 }
 
 void Game::Update() {
@@ -36,6 +44,18 @@ void Game::Update() {
     InvadorShootLaser();
   } else {
     invadorsShootDelay -= 0.1f;
+  }
+
+  if (!randomInvador.isAlive && randomInvadorsDelay <= 0) {
+    randomInvador.Spawn();
+  } else if (randomInvador.isAlive && randomInvadorsDelay <= 0) {
+    randomInvadorsDelay = rand() % (40 + 15 + 1) + 15;
+  } else if (!randomInvador.isAlive && randomInvadorsDelay > 0) {
+    randomInvadorsDelay -= 0.1f;
+  }
+
+  if (randomInvador.isAlive) {
+    randomInvador.Update();
   }
 
   MoveInvadors();
