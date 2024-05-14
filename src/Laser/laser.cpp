@@ -38,3 +38,7 @@ void Laser::Update() {
   sprite.setTexture(animation[frame]);
   sprite.setPosition(position);
 }
+
+sf::FloatRect Laser::GetHitbox() const {
+  return sf::FloatRect(position, {sprite.getGlobalBounds().width, sprite.getGlobalBounds().height});
+}

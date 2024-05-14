@@ -16,6 +16,8 @@ class Invador {
   static std::vector<std::vector<sf::Texture>> allInvadorAnimations;
   std::vector<sf::Texture> animation;
 
+  sf::FloatRect GetHitbox() const;
+
  private:
   size_t frame = 0;
   float time = 0.f;

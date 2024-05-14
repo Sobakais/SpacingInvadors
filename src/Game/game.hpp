@@ -3,6 +3,7 @@
 #include <Barrier/barrier.hpp>
 #include <Invador/invador.hpp>
 #include <RandomInvador/randominvador.hpp>
+#include <SFML/Graphics/Rect.hpp>
 #include <Spaceship/spaceship.hpp>
 
 class Game {
@@ -12,6 +13,8 @@ class Game {
   void Draw(sf::RenderWindow& window);
   void Update();
   void InputHandle();
+  void CheckCollisions();
+  bool HitboxCollide(const sf::FloatRect hitbox1, const sf::FloatRect hitbox2);
 
   std::vector<Barrier> CreateBarriers();
   std::vector<Invador> CreateInvadors();

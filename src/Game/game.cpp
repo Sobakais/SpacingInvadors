@@ -36,6 +36,8 @@ void Game::Draw(sf::RenderWindow& window) {
 }
 
 void Game::Update() {
+  CheckCollisions();
+
   spaceship.Update();
 
   DeleteInactiveLasers();
@@ -155,9 +157,99 @@ void Game::MoveInvadorsDown(int dist) {
 }
 
 void Game::InvadorShootLaser() {
+  if (invadors.empty()) {
+    return;
+  }
   int random = rand() % (invadors.size() - 0 + 1);
   invadorsLasers.push_back(Laser({invadors[random].position.x + ((35 - 14) / 2),
                                   invadors[random].position.y + 20},
                                  -5, invadors[random].sprite.getColor()));
   invadorsShootDelay = 3.5f;
+}
+
+void Game::CheckCollisions() {
+  // Check if spaceship lasers collides with invadors and block
+  for (auto& laser : spaceship.lasers) {
+    // Laser collides with invadors
+    auto it = invadors.begin();
+    while (it != invadors.end()) {
+      if (HitboxCollide(it->GetHitbox(), laser.GetHitbox())) {
+        it = invadors.erase(it);
+        laser.active = false;
+      } else {
+        ++it;
+      }
+    }
+    // Laser collides with blocks
+    for (auto& barrier : barriers) {
+      auto it = barrier.blocks.begin();
+      while (it != barrier.blocks.end()) {
+        if (HitboxCollide(it->GetHitbox(), laser.GetHitbox())) {
+          it = barrier.blocks.erase(it);
+          laser.active = false;
+        } else {
+          ++it;
+        }
+      }
+    }
+
+    if (HitboxCollide(randomInvador.GetHitbox(), laser.GetHitbox())) {
+      laser.active = false;
+      randomInvador.isAlive = false;
+    }
+  }
+
+  // Check if invadors lasers collides with spaceship and block
+  for (auto& laser : invadorsLasers) {
+    // Laser collides with blocks
+    for (auto& barrier : barriers) {
+      auto it = barrier.blocks.begin();
+      while (it != barrier.blocks.end()) {
+        if (HitboxCollide(it->GetHitbox(), laser.GetHitbox())) {
+          it = barrier.blocks.erase(it);
+          laser.active = false;
+        } else {
+          ++it;
+        }
+      }
+    }
+    // Laser collides with spaceship
+    if (HitboxCollide(spaceship.GetHitbox(), laser.GetHitbox())) {
+      laser.active = false;
+      // TODO: SpaceShip damage
+    }
+  }
+
+  // Check if invadors lasers collides with spaceship and block
+  for (auto& invador : invadors) {
+    for (auto& barrier : barriers) {
+      auto it = barrier.blocks.begin();
+      while (it != barrier.blocks.end()) {
+        if (HitboxCollide(it->GetHitbox(), invador.GetHitbox())) {
+          it = barrier.blocks.erase(it);
+        } else {
+          ++it;
+        }
+      }
+    }
+    if (HitboxCollide(spaceship.GetHitbox(), invador.GetHitbox())) {
+      // TODO: SpaceShip damage
+    }
+  }
+}
+
+bool Game::HitboxCollide(const sf::FloatRect hitbox1,
+                         const sf::FloatRect hitbox2) {
+  // Determine the minimum and maximum points of each hitbox
+  float left1 = hitbox1.left;
+  float right1 = hitbox1.left + hitbox1.width;
+  float top1 = hitbox1.top;
+  float bottom1 = hitbox1.top + hitbox1.height;
+
+  float left2 = hitbox2.left;
+  float right2 = hitbox2.left + hitbox2.width;
+  float top2 = hitbox2.top;
+  float bottom2 = hitbox2.top + hitbox2.height;
+
+  return (left1 < right2 && right1 > left2 && top1 < bottom2 && bottom1 > top2);
 }

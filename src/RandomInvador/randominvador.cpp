@@ -1,3 +1,4 @@
+#include <SFML/Graphics/Rect.hpp>
 #include <config.hpp>
 #include <vector>
 
@@ -33,3 +34,13 @@ void RandomInvador::Update() {
 }
 
 void RandomInvador::Draw(sf::RenderWindow& window) { window.draw(sprite); }
+
+sf::FloatRect RandomInvador::GetHitbox() const {
+  if (isAlive) {
+    return sf::FloatRect(
+        sprite.getPosition(),
+        {sprite.getGlobalBounds().width, sprite.getGlobalBounds().height});
+  } else {
+    return sf::FloatRect(sprite.getPosition(), {0, 0});
+  }
+}

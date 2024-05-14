@@ -9,3 +9,5 @@ void Block::Draw(sf::RenderWindow& window) {
   rect.setFillColor(sf::Color(13, 0, 203, 255));
   window.draw(rect);
 }
+
+sf::FloatRect Block::GetHitbox() const { return sf::FloatRect(position, {3, 3}); }

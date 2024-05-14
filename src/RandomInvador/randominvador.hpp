@@ -11,6 +11,8 @@ class RandomInvador {
 
   bool isAlive;
 
+  sf::FloatRect GetHitbox() const;
+
  private:
   std::vector<sf::Texture> texture;
   sf::Sprite sprite;

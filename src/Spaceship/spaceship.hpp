@@ -1,6 +1,7 @@
 #pragma once
 #include <Laser/laser.hpp>
 #include <SFML/Graphics.hpp>
+#include <SFML/Graphics/Rect.hpp>
 
 class Spaceship {
  public:
@@ -14,6 +15,8 @@ class Spaceship {
   void MoveRight();
 
   std::vector<Laser> lasers;
+
+  sf::FloatRect GetHitbox() const;
 
  private:
   sf::Sprite sprite;

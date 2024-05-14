@@ -1,3 +1,4 @@
+#include <SFML/Graphics/Rect.hpp>
 #include <config.hpp>
 
 #include "spaceship.hpp"
@@ -52,4 +53,8 @@ void Spaceship::MoveRight() {
   if (position.x + sprite.getLocalBounds().width > WINDOW_WIDTH) {
     position.x = WINDOW_WIDTH - sprite.getLocalBounds().width;
   }
+}
+
+sf::FloatRect Spaceship::GetHitbox() const {
+  return sf::FloatRect(position, {sprite.getGlobalBounds().width, sprite.getGlobalBounds().height});
 }

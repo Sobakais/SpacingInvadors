@@ -44,3 +44,7 @@ void Invador::Update() {
   frame = (int)time;
   sprite.setTexture(animation[frame]);
 }
+
+sf::FloatRect Invador::GetHitbox() const {
+  return sf::FloatRect(position, {sprite.getGlobalBounds().width, sprite.getGlobalBounds().height});
+}

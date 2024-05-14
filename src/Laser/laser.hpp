@@ -12,6 +12,8 @@ class Laser {
   bool active;
   int velocity;
 
+  sf::FloatRect GetHitbox() const;
+
  private:
   sf::Sprite sprite;
   static std::vector<sf::Texture> animation;
