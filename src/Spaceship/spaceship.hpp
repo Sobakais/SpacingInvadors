@@ -14,6 +14,8 @@ class Spaceship {
   void MoveLeft();
   void MoveRight();
 
+  void Reset();
+
   std::vector<Laser> lasers;
 
   sf::FloatRect GetHitbox() const;

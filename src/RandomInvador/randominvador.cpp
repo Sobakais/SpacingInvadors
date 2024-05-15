@@ -17,16 +17,16 @@ void RandomInvador::Spawn() {
   isAlive = true;
   bool direction = rand() % 2;
   if (direction) {
-    sprite.setPosition(0 - sprite.getLocalBounds().width, 30);
+    sprite.setPosition(-sprite.getLocalBounds().width, UI_OFFSET + 30);
     velocity = 2;
   } else {
-    sprite.setPosition(WINDOW_WIDTH, 30);
+    sprite.setPosition(WINDOW_WIDTH + UI_OFFSET, UI_OFFSET + 30);
     velocity = -2;
   }
 }
 
 void RandomInvador::Update() {
-  if (sprite.getPosition().x > WINDOW_WIDTH ||
+  if (sprite.getPosition().x > WINDOW_WIDTH + UI_OFFSET ||
       sprite.getPosition().x + sprite.getLocalBounds().width < 0) {
     isAlive = false;
   }

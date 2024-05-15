@@ -5,6 +5,7 @@
 #include <RandomInvador/randominvador.hpp>
 #include <SFML/Graphics/Rect.hpp>
 #include <Spaceship/spaceship.hpp>
+#include <UI.hpp>
 
 class Game {
  public:
@@ -15,12 +16,20 @@ class Game {
   void InputHandle();
   void CheckCollisions();
   bool HitboxCollide(const sf::FloatRect hitbox1, const sf::FloatRect hitbox2);
+  bool running;
 
   std::vector<Barrier> CreateBarriers();
   std::vector<Invador> CreateInvadors();
 
  private:
+  UserInterface ui;
+  
   Spaceship spaceship;
+  int shipLives;
+
+  void GameOver();
+  void InintializeGame();
+  void ResetGame();
 
   std::vector<Laser> invadorsLasers;
   std::vector<Invador> invadors;

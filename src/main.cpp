@@ -3,7 +3,9 @@
 #include <config.hpp>
 
 int main() {
-  sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Game");
+  sf::RenderWindow window(
+      sf::VideoMode(WINDOW_WIDTH + UI_OFFSET, WINDOW_HEIGHT + 2 * UI_OFFSET),
+      "Game");
   window.setFramerateLimit(FPS);
 
   Game game;
@@ -20,6 +22,7 @@ int main() {
 
     game.Draw(window);
 
+    // UI drawing
     window.display();
   }
 

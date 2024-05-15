@@ -3,19 +3,13 @@
 
 #include "game.hpp"
 
-Game::Game() {
-  barriers = CreateBarriers();
-
-  invadors = CreateInvadors();
-  invadorsDirection = 1;
-  invadorsLasers = std::vector<Laser>();
-
-  randomInvador = RandomInvador();
-}
+Game::Game() { InintializeGame(); }
 
 Game::~Game() {}
 
 void Game::Draw(sf::RenderWindow& window) {
+  ui.Draw(window);
+
   for (auto& laser : spaceship.lasers) {
     laser.Draw(window);
   }
@@ -28,6 +22,7 @@ void Game::Draw(sf::RenderWindow& window) {
   for (auto& invador : invadors) {
     invador.Draw(window);
   }
+
   spaceship.Draw(window);
 
   if (randomInvador.isAlive) {
@@ -36,6 +31,9 @@ void Game::Draw(sf::RenderWindow& window) {
 }
 
 void Game::Update() {
+  if (!running) {
+    return;
+  }
   CheckCollisions();
 
   spaceship.Update();
@@ -74,15 +72,22 @@ void Game::Update() {
 }
 
 void Game::InputHandle() {
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) &&
-      !sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-    spaceship.MoveLeft();
-  } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) &&
-             !sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-    spaceship.MoveRight();
-  }
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-    spaceship.Fire();
+  if (running) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) &&
+        !sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+      spaceship.MoveLeft();
+    } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) &&
+               !sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+      spaceship.MoveRight();
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+      spaceship.Fire();
+    }
+  } else {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
+      ResetGame();
+      InintializeGame();
+    }
   }
 }
 
@@ -105,10 +110,10 @@ void Game::DeleteInactiveLasers() {
 
 std::vector<Barrier> Game::CreateBarriers() {
   int barrierWidth = 25 * 3;
-  float gap = (WINDOW_WIDTH - barrierWidth * 4) / 5;
+  float gap = (WINDOW_WIDTH + UI_OFFSET - barrierWidth * 4) / 5;
   for (int i = 0; i < 4; i++) {
     float x = gap * (i + 1) + i * barrierWidth;
-    barriers.push_back(Barrier(sf::Vector2f(x, WINDOW_HEIGHT - 100)));
+    barriers.push_back(Barrier(sf::Vector2f(x, WINDOW_HEIGHT + UI_OFFSET - 135)));
   }
   return barriers;
 }
@@ -117,8 +122,8 @@ std::vector<Invador> Game::CreateInvadors() {
   int gap = 15;
   // Enemies field is 11 x 5
   // Invador sptite is 35 x 30
-  float beginX = (WINDOW_WIDTH - ((35 * 11) + (gap * 10))) / 2;
-  float beginY = 50;
+  float beginX = (WINDOW_WIDTH + (UI_OFFSET / 2) - ((35 * 11) + (gap * 10))) / 2;
+  float beginY = 50 + UI_OFFSET;
   for (int row = 0; row < 5; row++) {
     int Type = 0;
     if (row == 0) {
@@ -138,12 +143,12 @@ std::vector<Invador> Game::CreateInvadors() {
 
 void Game::MoveInvadors() {
   for (auto& invador : invadors) {
-    if (invador.position.x + 35 >= WINDOW_WIDTH) {
+    if (invador.position.x + 35 >= WINDOW_WIDTH + UI_OFFSET / 2) {
       invadorsDirection = -1;
-      MoveInvadorsDown(5);
-    } else if (invador.position.x <= 0) {
+      MoveInvadorsDown(7);
+    } else if (invador.position.x <= UI_OFFSET / 2) {
       invadorsDirection = 1;
-      MoveInvadorsDown(5);
+      MoveInvadorsDown(7);
     }
     invador.position.x += invadorsDirection;
     invador.Update();
@@ -164,7 +169,7 @@ void Game::InvadorShootLaser() {
   invadorsLasers.push_back(Laser({invadors[random].position.x + ((35 - 14) / 2),
                                   invadors[random].position.y + 20},
                                  -5, invadors[random].sprite.getColor()));
-  invadorsShootDelay = 3.5f;
+  invadorsShootDelay = 5.5f;
 }
 
 void Game::CheckCollisions() {
@@ -216,7 +221,10 @@ void Game::CheckCollisions() {
     // Laser collides with spaceship
     if (HitboxCollide(spaceship.GetHitbox(), laser.GetHitbox())) {
       laser.active = false;
-      // TODO: SpaceShip damage
+      shipLives--;
+      if (shipLives == 0) {
+        GameOver();
+      }
     }
   }
 
@@ -233,7 +241,7 @@ void Game::CheckCollisions() {
       }
     }
     if (HitboxCollide(spaceship.GetHitbox(), invador.GetHitbox())) {
-      // TODO: SpaceShip damage
+      GameOver();
     }
   }
 }
@@ -252,4 +260,29 @@ bool Game::HitboxCollide(const sf::FloatRect hitbox1,
   float bottom2 = hitbox2.top + hitbox2.height;
 
   return (left1 < right2 && right1 > left2 && top1 < bottom2 && bottom1 > top2);
+}
+
+void Game::InintializeGame() {
+  ui = UserInterface();
+  
+  shipLives = 3;
+
+  barriers = CreateBarriers();
+
+  invadors = CreateInvadors();
+  invadorsDirection = 1;
+  invadorsLasers = std::vector<Laser>();
+
+  randomInvador = RandomInvador();
+
+  running = true;
+}
+
+void Game::GameOver() { running = false; }
+
+void Game::ResetGame() {
+  spaceship.Reset();
+  invadors.clear();
+  invadorsLasers.clear();
+  barriers.clear();
 }

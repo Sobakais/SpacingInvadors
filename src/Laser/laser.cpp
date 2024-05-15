@@ -28,8 +28,8 @@ Laser::~Laser() {}
 void Laser::Draw(sf::RenderWindow& window) { window.draw(sprite); }
 
 void Laser::Update() {
-  if (position.y + sprite.getLocalBounds().height < 0.f ||
-      position.y > WINDOW_HEIGHT) {
+  if (position.y  < UI_OFFSET ||
+      position.y + sprite.getLocalBounds().height + 7 > WINDOW_HEIGHT + UI_OFFSET) {
     active = false;
   }
   time = time > 12.7f ? 0.f : time + 0.2f;
