@@ -3,6 +3,9 @@
 #include <Barrier/barrier.hpp>
 #include <Invador/invador.hpp>
 #include <RandomInvador/randominvador.hpp>
+#include <SFML/Audio/Music.hpp>
+#include <SFML/Audio/Sound.hpp>
+#include <SFML/Audio/SoundBuffer.hpp>
 #include <SFML/Graphics/Rect.hpp>
 #include <Spaceship/spaceship.hpp>
 #include <UI.hpp>
@@ -21,11 +24,19 @@ class Game {
   std::vector<Barrier> CreateBarriers();
   std::vector<Invador> CreateInvadors();
 
+  int shipLives;
+  int score;
+  int highScore;
+
+  void UpdateHighScore();
+  int LoadHighScore();
+  void SaveHighScore();
+
  private:
   UserInterface ui;
-  
+
+  sf::Music backgroundMusic;
   Spaceship spaceship;
-  int shipLives;
 
   void GameOver();
   void InintializeGame();

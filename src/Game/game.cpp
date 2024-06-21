@@ -1,9 +1,19 @@
+#include <SFML/Audio/Sound.hpp>
 #include <config.hpp>
-#include <cstdlib>
+#include <fstream>
 
 #include "game.hpp"
 
-Game::Game() { InintializeGame(); }
+Game::Game() {
+  if (!backgroundMusic.openFromFile(PROJECT_DIR
+                                    "/src/media/sounds/music.ogg")) {
+    // handle error loading file
+  }
+  backgroundMusic.setLoop(true);
+  backgroundMusic.play();
+
+  InintializeGame();
+}
 
 Game::~Game() {}
 
@@ -113,7 +123,8 @@ std::vector<Barrier> Game::CreateBarriers() {
   float gap = (WINDOW_WIDTH + UI_OFFSET - barrierWidth * 4) / 5;
   for (int i = 0; i < 4; i++) {
     float x = gap * (i + 1) + i * barrierWidth;
-    barriers.push_back(Barrier(sf::Vector2f(x, WINDOW_HEIGHT + UI_OFFSET - 135)));
+    barriers.push_back(
+        Barrier(sf::Vector2f(x, WINDOW_HEIGHT + UI_OFFSET - 135)));
   }
   return barriers;
 }
@@ -122,7 +133,8 @@ std::vector<Invador> Game::CreateInvadors() {
   int gap = 15;
   // Enemies field is 11 x 5
   // Invador sptite is 35 x 30
-  float beginX = (WINDOW_WIDTH + (UI_OFFSET / 2) - ((35 * 11) + (gap * 10))) / 2;
+  float beginX =
+      (WINDOW_WIDTH + (UI_OFFSET / 2) - ((35 * 11) + (gap * 10))) / 2;
   float beginY = 50 + UI_OFFSET;
   for (int row = 0; row < 5; row++) {
     int Type = 0;
@@ -172,6 +184,7 @@ void Game::InvadorShootLaser() {
   invadorsShootDelay = 5.5f;
 }
 
+// Type 1: 100, Type 2: 200, Type 3: 300, Random: 500
 void Game::CheckCollisions() {
   // Check if spaceship lasers collides with invadors and block
   for (auto& laser : spaceship.lasers) {
@@ -181,6 +194,8 @@ void Game::CheckCollisions() {
       if (HitboxCollide(it->GetHitbox(), laser.GetHitbox())) {
         it = invadors.erase(it);
         laser.active = false;
+        score += (it->type + 1) * 100;
+        UpdateHighScore();
       } else {
         ++it;
       }
@@ -201,6 +216,8 @@ void Game::CheckCollisions() {
     if (HitboxCollide(randomInvador.GetHitbox(), laser.GetHitbox())) {
       laser.active = false;
       randomInvador.isAlive = false;
+      score += 500;
+      UpdateHighScore();
     }
   }
 
@@ -264,8 +281,11 @@ bool Game::HitboxCollide(const sf::FloatRect hitbox1,
 
 void Game::InintializeGame() {
   ui = UserInterface();
-  
+
   shipLives = 3;
+
+  score = 0;
+  highScore = LoadHighScore();
 
   barriers = CreateBarriers();
 
@@ -278,11 +298,37 @@ void Game::InintializeGame() {
   running = true;
 }
 
-void Game::GameOver() { running = false; }
+void Game::GameOver() {
+  running = false;
+  UpdateHighScore();
+  SaveHighScore();
+}
 
 void Game::ResetGame() {
   spaceship.Reset();
   invadors.clear();
   invadorsLasers.clear();
   barriers.clear();
+}
+
+void Game::UpdateHighScore() {
+  if (score > highScore) {
+    highScore = score;
+  }
+}
+
+int Game::LoadHighScore() {
+  std::ifstream file;
+  file.open(PROJECT_DIR "/src/highscore.txt");
+  int sc;
+  file >> sc;
+  file.close();
+  return sc;
+}
+
+void Game::SaveHighScore() {
+  std::ofstream file;
+  file.open(PROJECT_DIR "/src/highscore.txt");
+  file << highScore;
+  file.close();
 }

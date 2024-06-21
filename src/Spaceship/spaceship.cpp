@@ -11,8 +11,9 @@ Spaceship::Spaceship() {
     animation.push_back(texture);
   }
   sprite.setTexture(animation[frame]);
-  position = {(WINDOW_WIDTH + UI_OFFSET - sprite.getLocalBounds().width) / 2,
-              (WINDOW_HEIGHT + UI_OFFSET - 25 - sprite.getLocalBounds().height)};
+  position = {
+      (WINDOW_WIDTH + UI_OFFSET - sprite.getLocalBounds().width) / 2,
+      (WINDOW_HEIGHT + UI_OFFSET - 25 - sprite.getLocalBounds().height)};
   sprite.setPosition(position);
   lasers = std::vector<Laser>();
 }
@@ -43,24 +44,27 @@ void Spaceship::Update() {
 
 void Spaceship::MoveLeft() {
   position.x -= 5;
-  if (position.x < 0) {
-    position.x = 0;
+  if (position.x - (UI_OFFSET / 2) < 0) {
+    position.x = UI_OFFSET / 2;
   }
 }
 
 void Spaceship::MoveRight() {
   position.x += 5;
-  if (position.x + sprite.getLocalBounds().width > WINDOW_WIDTH) {
-    position.x = WINDOW_WIDTH - sprite.getLocalBounds().width;
+  if (position.x + sprite.getLocalBounds().width >
+      WINDOW_WIDTH + (UI_OFFSET / 2)) {
+    position.x = WINDOW_WIDTH - sprite.getLocalBounds().width + (UI_OFFSET / 2);
   }
 }
 
 sf::FloatRect Spaceship::GetHitbox() const {
-  return sf::FloatRect(position, {sprite.getGlobalBounds().width, sprite.getGlobalBounds().height});
+  return sf::FloatRect(position, {sprite.getGlobalBounds().width,
+                                  sprite.getGlobalBounds().height});
 }
 
 void Spaceship::Reset() {
-  position = {(WINDOW_WIDTH + UI_OFFSET - sprite.getLocalBounds().width) / 2,
-              (WINDOW_HEIGHT + UI_OFFSET - 25 - sprite.getLocalBounds().height)};
+  position = {
+      (WINDOW_WIDTH + UI_OFFSET - sprite.getLocalBounds().width) / 2,
+      (WINDOW_HEIGHT + UI_OFFSET - 25 - sprite.getLocalBounds().height)};
   lasers.clear();
 }
