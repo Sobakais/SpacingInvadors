@@ -36,3 +36,7 @@ compile_commands.json
 # CMake folders
 bin
 build
+.cache
+.flac
+.wav
+out
