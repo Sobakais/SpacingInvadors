@@ -3,7 +3,7 @@
 This project is a remake of the classic Space Invaders game created in C++ with modern touch. The game involves defending the earth from invading aliens by shooting them down with a spaceship.
 
 ## Screenshot
-<img src="https://github.com/Sobakais/SpacingInvadors/screenshots/1.png" alt="Screenshot">
+<img src="https://github.com/Sobakais/SpacingInvadors/blob/main/screenshots/1.png" alt="Screenshot">
 
 ## Lore
 In the distant future, Eorth faced an unexpected threat from an advanced alien civilization known as the 'Invadors'. These hostile aliens, driven by a desire for conquest and domination, launched a massive invasion force towards our planet. With their powerful warships and deadly weaponry, they quickly overwhelmed Eorth's defenses, laying waste to entire cities.
